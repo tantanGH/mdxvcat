@@ -1,2 +1,2 @@
-# fmtonedb
-OPM Tone Editor and Database for X680x0
+# opm
+OPM Tone Editor for X680x0/Human68k
