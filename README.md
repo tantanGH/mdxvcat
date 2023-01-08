@@ -1,2 +1,2 @@
 # fmtonedb
-OPM FM Tone Editor and Database for X680x0
+OPM Tone Editor and Database for X680x0
