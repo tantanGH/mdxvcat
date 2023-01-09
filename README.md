@@ -99,7 +99,7 @@ MDXVCxxx.ZIP をダウンロードして展開し、MDXVCAT.X をパスの通っ
       {  31,  14,  10,   8,   3,  21,   0,   0,   0,   0,   0 },
       {  31,  11,   9,  12,   1,  18,   0,   1,   0,   0,   0 }
     };
-    /* m_vset(33,voice_data_34); */
+    /* m_vset(34,voice_data_34); */
 
     char voice_data_41[5][11] = {
     /*  AF   SM   WF   SY   SP   PMD  AMD  PMS  AMS  PAN  RSV */
@@ -110,7 +110,7 @@ MDXVCxxx.ZIP をダウンロードして展開し、MDXVCAT.X をパスの通っ
       {  30,  22,  11,   4,   5,  50,   0,  14,   7,   0,   0 },
       {  30,   7,   8,   7,   4,  28,   0,   1,   3,   0,   0 }
     };
-    /* m_vset(40,voice_data_41); */
+    /* m_vset(41,voice_data_41); */
 
 ---
 
