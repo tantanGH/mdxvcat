@@ -6,6 +6,8 @@
 
 typedef struct {
 
+  unsigned char file_name[32];
+
   unsigned char* data_buffer;
   int data_len;
 
@@ -22,6 +24,6 @@ typedef struct {
 int mdx_open(MDX* mdx, const unsigned char* file_name);
 void mdx_close(MDX* mdx);
 void mdx_describe(MDX* mdx);
-int mdx_get_voices(MDX* mdx, VOICE* voices, int buffer_size);
+VOICE_SET* mdx_get_voice_set(MDX* mdx);
 
 #endif

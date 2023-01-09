@@ -5,6 +5,11 @@
 #include <stddef.h>
 #include <class.h>
 
+#define FORMAT_MDX  (0)
+#define FORMAT_ZMS  (1)
+#define FORMAT_XC   (2)
+#define FORMAT_BAS  (3)
+
 typedef struct {
 
   unsigned int voice_id;
@@ -12,7 +17,7 @@ typedef struct {
   time_t create_time;
   time_t update_time;
   
-  unsigned char version[8];       // opmvedit.x version
+  unsigned char version[8];
 
   unsigned char name[24];
   unsigned char tag1[8];
@@ -39,88 +44,77 @@ typedef struct {
   unsigned char reserved;
 
   unsigned char attack_rate_m1;
-  unsigned char decay_rate_m1;
-  unsigned char sustain_rate_m1;
+  unsigned char decay_rate1_m1;
+  unsigned char decay_rate2_m1;
   unsigned char release_rate_m1;
-  unsigned char sustain_level_m1;
+  unsigned char decay_level1_m1;
   unsigned char total_level_m1;
   unsigned char key_scaling_m1;
   unsigned char phase_multi_m1;
   unsigned char detune1_m1;
   unsigned char detune2_m1;
-  unsigned char ame_enable_m1;
+  unsigned char ams_enable_m1;
 
   unsigned char attack_rate_c1;
-  unsigned char decay_rate_c1;
-  unsigned char sustain_rate_c1;
+  unsigned char decay_rate1_c1;
+  unsigned char decay_rate2_c1;
   unsigned char release_rate_c1;
-  unsigned char sustain_level_c1;
+  unsigned char decay_level1_c1;
   unsigned char total_level_c1;
   unsigned char key_scaling_c1;
   unsigned char phase_multi_c1;
   unsigned char detune1_c1;
   unsigned char detune2_c1;
-  unsigned char ame_enable_c1;  
+  unsigned char ams_enable_c1;  
 
   unsigned char attack_rate_m2;
-  unsigned char decay_rate_m2;
-  unsigned char sustain_rate_m2;
+  unsigned char decay_rate1_m2;
+  unsigned char decay_rate2_m2;
   unsigned char release_rate_m2;
-  unsigned char sustain_level_m2;
+  unsigned char decay_level1_m2;
   unsigned char total_level_m2;
   unsigned char key_scaling_m2;
   unsigned char phase_multi_m2;
   unsigned char detune1_m2;
   unsigned char detune2_m2;
-  unsigned char ame_enable_m2;
+  unsigned char ams_enable_m2;
 
   unsigned char attack_rate_c2;
-  unsigned char decay_rate_c2;
-  unsigned char sustain_rate_c2;
+  unsigned char decay_rate1_c2;
+  unsigned char decay_rate2_c2;
   unsigned char release_rate_c2;
-  unsigned char sustain_level_c2;
+  unsigned char decay_level1_c2;
   unsigned char total_level_c2;
   unsigned char key_scaling_c2;
   unsigned char phase_multi_c2;
   unsigned char detune1_c2;
   unsigned char detune2_c2;
-  unsigned char ame_enable_c2;
+  unsigned char ams_enable_c2;
 
 } VOICE;
 
 typedef struct {
 
   unsigned int voice_set_id;
-  unsigned char version[8];       // opmvedit.x version
+  unsigned char version[8];
 
   time_t create_time;
   time_t update_time;
 
-  unsigned char name[24];
+  unsigned char name[32];
   unsigned char tag1[8];
   unsigned char tag2[8];
   unsigned char tag3[8];
   unsigned char tag4[8];
-  unsigned char comment[64];
+  unsigned char comment[256];
 
   int voice_count;
-  VOICE voices[];
+  VOICE* voices;
 
 } VOICE_SET;
 
 // prototype declarations
-/*
-int voice_set_load(OPM_VOICE_SET* ovs, FILE* fp);
-int voice_set_save(OPM_VOICE_SET* ovs, FILE* fp);
-int voice_set_select_voices(OPM_VOICE_SET* ovs, OPM_VOICE* ov_list, int ov_count, const char* tag);
-int voice_set_sort_voices(VOICE_SET* ovs, int sort_key, int sort_order);
-int voice_set_add_voice(VOICE_SET* ovs, OPM_VOICE* ov);
-int voice_set_add_voices(VOICE_SET* ovs, OPM_VOICE* VOICEs, int VOICE_count);
-int voice_set_delete_VOICE(VOICE_SET* ovs, unsigned int VOICE_id);
-int voice_set_up_VOICE(VOICE_SET* VOICE_set, unsigned int VOICE_id);
-int voice_set_down_VOICE(VOICE_SET* VOICE_set, unsigned int VOICE_id);
-int voice_set_describe(VOICE_SET* VOICE);
-*/
-void voice_fwrite(VOICE* v, FILE* fp, int format);
+void voice_set_fwrite(VOICE_SET* vs, FILE* fp, int format);
+void voice_set_close(VOICE_SET* vs);
 
 #endif
