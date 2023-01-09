@@ -16,16 +16,16 @@ CC = ${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-gcc
 GAS2HAS = perl ${XDEV68K_DIR}/util/x68k_gas2has.pl -cpu 68000 -inc doscall.inc -inc iocscall.inc
 RUN68 = ${XDEV68K_DIR}/run68/run68
 HAS = $(RUN68) ${XDEV68K_DIR}/x68k_bin/HAS060.X
-HLK = $(RUN68) ${XDEV68K_DIR}/x68k_bin/LK.X #hlk301.x だと out of memory になってしまう
+HLK = $(RUN68) ${XDEV68K_DIR}/x68k_bin/hlk301.x
 
 # 実行ファイル名
-TARGET_FILE = OPMED.X
+TARGET_FILE = OPMTONE.X
 
 # Document file
-DOCUMENT_FILE = OPMED.DOC
+DOCUMENT_FILE = OPMTONE.DOC
 
 # Distribution package 
-PACKAGE_FILE = ../OPMED010.ZIP
+PACKAGE_FILE = ../OPMTN010.ZIP
 
 # ヘッダ検索パス
 INCLUDE_FLAGS = -I${XDEV68K_DIR}/include/xc -I${XDEV68K_DIR}/include/xdev68k
@@ -36,7 +36,7 @@ CFLAGS = $(COMMON_FLAGS) -Wno-builtin-declaration-mismatch -fcall-used-d2 -fcall
     -fexec-charset=cp932 -fverbose-asm -fno-defer-pop
 
 # *.c ソースファイル
-C_SRCS = main.c
+C_SRCS = memory.c mdx.c voice.c main.c
 
 # *.s ソースファイル
 ASM_SRCS =

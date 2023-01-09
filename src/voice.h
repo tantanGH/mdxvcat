@@ -1,5 +1,5 @@
-#ifndef __H_TONE__
-#define __H_TONE__
+#ifndef __H_VOICE__
+#define __H_VOICE__
 
 #include <stdio.h>
 #include <stddef.h>
@@ -7,22 +7,23 @@
 
 typedef struct {
 
-  unsigned int tone_id;
-  short version;
+  unsigned int voice_id;
 
   time_t create_time;
   time_t update_time;
+  
+  unsigned char version[8];       // opmvedit.x version
 
-  unsigned int selected;
-
-  unsigned char tone_name[32];
-
+  unsigned char name[24];
   unsigned char tag1[8];
   unsigned char tag2[8];
   unsigned char tag3[8];
   unsigned char tag4[8];
+  unsigned char comment[64];
 
-  unsigned char comment[256];
+  unsigned char favorite;
+  unsigned char selected;         // for UI use only (not serialized)
+  unsigned char deleted;          // for UI use only (not serialized)
 
   unsigned char connection;
   unsigned char feedback;
@@ -85,37 +86,41 @@ typedef struct {
   unsigned char detune2_c2;
   unsigned char ame_enable_c2;
 
-} TONE;
+} VOICE;
 
 typedef struct {
 
-  unsigned int tone_set_id;
-  short version;
+  unsigned int voice_set_id;
+  unsigned char version[8];       // opmvedit.x version
 
   time_t create_time;
   time_t update_time;
 
-  unsigned char name[32];
-
+  unsigned char name[24];
   unsigned char tag1[8];
   unsigned char tag2[8];
   unsigned char tag3[8];
   unsigned char tag4[8];
+  unsigned char comment[64];
 
-  unsigned char comment[256];
+  int voice_count;
+  VOICE voices[];
 
-  ULONG tone_count;
-  TONE tones[];
-
-} TONE_SET;
+} VOICE_SET;
 
 // prototype declarations
-int tone_set_load(TONE_SET* tone_set, FILE* fp);
-int tone_set_save(TONE_SET* tone_set, FILE* fp);
-int tone_set_select_tones(TONE_SET* tone_set, TONE* tone_list, int tone_list_size, const char* tag);
-int tone_set_sort_tones(TONE_SET* tone_set, int sort_key, int sort_order);
-int tone_set_add_tone(TONE_SET* tone_set, TONE* tone);
-int tone_set_add_tones(TONE_SET* tone_set, TONE* tones, int tone_count);
-int tone_set_delete_tone(TONE_SET* tone_set, unsigned int tone_id);
+/*
+int voice_set_load(OPM_VOICE_SET* ovs, FILE* fp);
+int voice_set_save(OPM_VOICE_SET* ovs, FILE* fp);
+int voice_set_select_voices(OPM_VOICE_SET* ovs, OPM_VOICE* ov_list, int ov_count, const char* tag);
+int voice_set_sort_voices(VOICE_SET* ovs, int sort_key, int sort_order);
+int voice_set_add_voice(VOICE_SET* ovs, OPM_VOICE* ov);
+int voice_set_add_voices(VOICE_SET* ovs, OPM_VOICE* VOICEs, int VOICE_count);
+int voice_set_delete_VOICE(VOICE_SET* ovs, unsigned int VOICE_id);
+int voice_set_up_VOICE(VOICE_SET* VOICE_set, unsigned int VOICE_id);
+int voice_set_down_VOICE(VOICE_SET* VOICE_set, unsigned int VOICE_id);
+int voice_set_describe(VOICE_SET* VOICE);
+*/
+void voice_fwrite(VOICE* v, FILE* fp, int format);
 
 #endif
