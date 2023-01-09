@@ -4,6 +4,8 @@
 #include "voice.h"
 #include <stdio.h>
 
+#define MDX_VOICE_LEN (27)
+
 typedef struct {
 
   unsigned char file_name[32];

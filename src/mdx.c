@@ -117,7 +117,7 @@ int mdx_open(MDX* mdx, const unsigned char* file_name) {
   ofs += 2;
 
   // count voices
-  mdx->voice_count = ( mdx->data_len - mdx->voice_offset ) / 27;
+  mdx->voice_count = ( mdx->data_len - mdx->voice_offset ) / MDX_VOICE_LEN;
 
   // channel data offset
   for (int i = 0; i < 9; i++) {   // OPM 8 + PCM 1
@@ -204,11 +204,13 @@ VOICE_SET* mdx_get_voice_set(MDX* mdx) {
     v->selected = 0;
     v->deleted = 0;
 
-    v->voice_id = mdx->data_buffer[ i * 27 + 0 ];
+    unsigned char* vbuf = &(mdx->data_buffer[ mdx->voice_offset + i * MDX_VOICE_LEN ]);
 
-    v->connection = ( mdx->data_buffer[ i * 27 + 1 ] ) & 0x07;
-    v->feedback = ( mdx->data_buffer[ i * 27 + 1 ] >> 3 ) & 0x07;
-    v->slot_mask = ( mdx->data_buffer[ i * 27 + 2 ] ) & 0x03;
+    v->voice_id = vbuf[0];
+
+    v->connection = ( vbuf[1] ) & 0x07;
+    v->feedback = ( vbuf[1] >> 3 ) & 0x07;
+    v->slot_mask = ( vbuf[2] ) & 0x0f;
     v->wave_form = 0;
     v->synchro = 0;
     v->speed = 0;
@@ -219,60 +221,60 @@ VOICE_SET* mdx_get_voice_set(MDX* mdx) {
     v->pan = 3;
     v->reserved = 0;
 
-    v->detune1_m1 = ( mdx->data_buffer[ i * 27 + 3 ] >> 4 ) & 0x07;
-    v->detune1_m2 = ( mdx->data_buffer[ i * 27 + 4 ] >> 4 ) & 0x07;
-    v->detune1_c1 = ( mdx->data_buffer[ i * 27 + 5 ] >> 4 ) & 0x07;
-    v->detune1_c2 = ( mdx->data_buffer[ i * 27 + 6 ] >> 4 ) & 0x07;
+    v->detune1_m1 = ( vbuf[3] >> 4 ) & 0x07;
+    v->detune1_m2 = ( vbuf[4] >> 4 ) & 0x07;
+    v->detune1_c1 = ( vbuf[5] >> 4 ) & 0x07;
+    v->detune1_c2 = ( vbuf[6] >> 4 ) & 0x07;
 
-    v->phase_multi_m1 = ( mdx->data_buffer[ i * 27 + 3 ] ) & 0x0f;
-    v->phase_multi_m2 = ( mdx->data_buffer[ i * 27 + 4 ] ) & 0x0f;
-    v->phase_multi_c1 = ( mdx->data_buffer[ i * 27 + 5 ] ) & 0x0f;
-    v->phase_multi_c2 = ( mdx->data_buffer[ i * 27 + 6 ] ) & 0x0f;
+    v->phase_multi_m1 = ( vbuf[3] ) & 0x0f;
+    v->phase_multi_m2 = ( vbuf[4] ) & 0x0f;
+    v->phase_multi_c1 = ( vbuf[5] ) & 0x0f;
+    v->phase_multi_c2 = ( vbuf[6] ) & 0x0f;
 
-    v->total_level_m1 = ( mdx->data_buffer[ i * 27 +  7 ] ) & 0x7f;
-    v->total_level_m2 = ( mdx->data_buffer[ i * 27 +  8 ] ) & 0x7f;
-    v->total_level_c1 = ( mdx->data_buffer[ i * 27 +  9 ] ) & 0x7f;
-    v->total_level_c2 = ( mdx->data_buffer[ i * 27 + 10 ] ) & 0x7f;
+    v->total_level_m1 = ( vbuf[7] ) & 0x7f;
+    v->total_level_m2 = ( vbuf[8] ) & 0x7f;
+    v->total_level_c1 = ( vbuf[9] ) & 0x7f;
+    v->total_level_c2 = ( vbuf[10] ) & 0x7f;
 
-    v->key_scaling_m1 = ( mdx->data_buffer[ i * 27 + 11 ] >> 6 ) & 0x03;
-    v->key_scaling_m2 = ( mdx->data_buffer[ i * 27 + 12 ] >> 6 ) & 0x03;
-    v->key_scaling_c1 = ( mdx->data_buffer[ i * 27 + 13 ] >> 6 ) & 0x03;
-    v->key_scaling_c2 = ( mdx->data_buffer[ i * 27 + 14 ] >> 6 ) & 0x03;
+    v->key_scaling_m1 = ( vbuf[11] >> 6 ) & 0x03;
+    v->key_scaling_m2 = ( vbuf[12] >> 6 ) & 0x03;
+    v->key_scaling_c1 = ( vbuf[13] >> 6 ) & 0x03;
+    v->key_scaling_c2 = ( vbuf[14] >> 6 ) & 0x03;
 
-    v->attack_rate_m1 = ( mdx->data_buffer[ i * 27 + 11 ] ) & 0x1f;
-    v->attack_rate_m2 = ( mdx->data_buffer[ i * 27 + 12 ] ) & 0x1f;
-    v->attack_rate_c1 = ( mdx->data_buffer[ i * 27 + 13 ] ) & 0x1f;
-    v->attack_rate_c2 = ( mdx->data_buffer[ i * 27 + 14 ] ) & 0x1f;
+    v->attack_rate_m1 = ( vbuf[11] ) & 0x1f;
+    v->attack_rate_m2 = ( vbuf[12] ) & 0x1f;
+    v->attack_rate_c1 = ( vbuf[13] ) & 0x1f;
+    v->attack_rate_c2 = ( vbuf[14] ) & 0x1f;
 
-    v->ams_enable_m1 = ( mdx->data_buffer[ i * 27 + 15 ] >> 7 ) & 0x01;
-    v->ams_enable_m2 = ( mdx->data_buffer[ i * 27 + 16 ] >> 7 ) & 0x01;
-    v->ams_enable_c1 = ( mdx->data_buffer[ i * 27 + 17 ] >> 7 ) & 0x01;
-    v->ams_enable_c2 = ( mdx->data_buffer[ i * 27 + 18 ] >> 7 ) & 0x01;
+    v->ams_enable_m1 = ( vbuf[15] >> 7 ) & 0x01;
+    v->ams_enable_m2 = ( vbuf[16] >> 7 ) & 0x01;
+    v->ams_enable_c1 = ( vbuf[17] >> 7 ) & 0x01;
+    v->ams_enable_c2 = ( vbuf[18] >> 7 ) & 0x01;
 
-    v->decay_rate1_m1 = ( mdx->data_buffer[ i * 27 + 15 ] ) & 0x1f;
-    v->decay_rate1_m2 = ( mdx->data_buffer[ i * 27 + 16 ] ) & 0x1f;
-    v->decay_rate1_c1 = ( mdx->data_buffer[ i * 27 + 17 ] ) & 0x1f;
-    v->decay_rate1_c2 = ( mdx->data_buffer[ i * 27 + 18 ] ) & 0x1f;
+    v->decay_rate1_m1 = ( vbuf[15] ) & 0x1f;
+    v->decay_rate1_m2 = ( vbuf[16] ) & 0x1f;
+    v->decay_rate1_c1 = ( vbuf[17] ) & 0x1f;
+    v->decay_rate1_c2 = ( vbuf[18] ) & 0x1f;
 
-    v->detune2_m1 = ( mdx->data_buffer[ i * 27 + 19 ] >> 6 ) & 0x03;
-    v->detune2_m2 = ( mdx->data_buffer[ i * 27 + 20 ] >> 6 ) & 0x03;
-    v->detune2_c1 = ( mdx->data_buffer[ i * 27 + 21 ] >> 6 ) & 0x03;
-    v->detune2_c2 = ( mdx->data_buffer[ i * 27 + 22 ] >> 6 ) & 0x03;
+    v->detune2_m1 = ( vbuf[19] >> 6 ) & 0x03;
+    v->detune2_m2 = ( vbuf[20] >> 6 ) & 0x03;
+    v->detune2_c1 = ( vbuf[21] >> 6 ) & 0x03;
+    v->detune2_c2 = ( vbuf[22] >> 6 ) & 0x03;
 
-    v->decay_rate2_m1 = ( mdx->data_buffer[ i * 27 + 19 ] ) & 0x1f;
-    v->decay_rate2_m2 = ( mdx->data_buffer[ i * 27 + 20 ] ) & 0x1f;
-    v->decay_rate2_c1 = ( mdx->data_buffer[ i * 27 + 21 ] ) & 0x1f;
-    v->decay_rate2_c2 = ( mdx->data_buffer[ i * 27 + 22 ] ) & 0x1f;
+    v->decay_rate2_m1 = ( vbuf[19] ) & 0x1f;
+    v->decay_rate2_m2 = ( vbuf[20] ) & 0x1f;
+    v->decay_rate2_c1 = ( vbuf[21] ) & 0x1f;
+    v->decay_rate2_c2 = ( vbuf[22] ) & 0x1f;
 
-    v->decay_level1_m1 = ( mdx->data_buffer[ i * 27 + 23 ] >> 4 ) & 0x0f;
-    v->decay_level1_m2 = ( mdx->data_buffer[ i * 27 + 24 ] >> 4 ) & 0x0f;
-    v->decay_level1_c1 = ( mdx->data_buffer[ i * 27 + 25 ] >> 4 ) & 0x0f;
-    v->decay_level1_c2 = ( mdx->data_buffer[ i * 27 + 26 ] >> 4 ) & 0x0f;
+    v->decay_level1_m1 = ( vbuf[23] >> 4 ) & 0x0f;
+    v->decay_level1_m2 = ( vbuf[24] >> 4 ) & 0x0f;
+    v->decay_level1_c1 = ( vbuf[25] >> 4 ) & 0x0f;
+    v->decay_level1_c2 = ( vbuf[26] >> 4 ) & 0x0f;
 
-    v->release_rate_m1 = ( mdx->data_buffer[ i * 27 + 23 ] ) & 0x1f;
-    v->release_rate_m2 = ( mdx->data_buffer[ i * 27 + 24 ] ) & 0x1f;
-    v->release_rate_c1 = ( mdx->data_buffer[ i * 27 + 25 ] ) & 0x1f;
-    v->release_rate_c2 = ( mdx->data_buffer[ i * 27 + 26 ] ) & 0x1f;
+    v->release_rate_m1 = ( vbuf[23] ) & 0x0f;
+    v->release_rate_m2 = ( vbuf[24] ) & 0x0f;
+    v->release_rate_c1 = ( vbuf[25] ) & 0x0f;
+    v->release_rate_c2 = ( vbuf[26] ) & 0x0f;
   }
 
   return vs;

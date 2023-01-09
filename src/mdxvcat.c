@@ -4,15 +4,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+void show_help() {
+  printf("MDXVCAT - MDX Voice Data Extractor version " VERSION " 2023 by tantan\n");
+  printf("usage: mdxvcat [option] <mdx-file-name>\n");
+  printf("options:\n");
+  printf("  -f<format>   ... 0:MDX(default) 1:ZMS 2:XC 3:BAS\n");
+  printf("  -o<out-file> ... output file name (default:stdout)\n");
+  printf("  -h           ... show help message\n");
+}
+
 int main(int argc, char* argv[]) {
 
   int rc = 1;
 
   if (argc < 2) {
-    printf("usage: mdxvcat [option] <mdx-file-name>\n");
-    printf("options:\n");
-    printf("  -f<format>   ... 0:MDX(default) 1:ZMS 2:XC 3:BAS\n");
-    printf("  -o<out-file> ... output file name (default:stdout)\n");
+    show_help();
     goto exit;
   }
 
@@ -24,9 +30,25 @@ int main(int argc, char* argv[]) {
   for (int i = 1; i < argc; i++) {
     if (argv[i][0] == '-') {
       if (argv[i][1] == 'f') {
-        format = atoi(argv[i]+2);
+        if (argv[i][2] >= '0' && argv[i][2] <= '3') {
+          format = atoi(argv[i]+2);
+        } else if (strcmp(argv[i]+2,"mdx") == 0) {
+          format = FORMAT_MDX;
+        } else if (strcmp(argv[i]+2,"zms") == 0) {
+          format = FORMAT_ZMS;
+        } else if (strcmp(argv[i]+2,"xc") == 0) {
+          format = FORMAT_XC;
+        } else if (strcmp(argv[i]+2,"bas") == 0) {
+          format = FORMAT_BAS;
+        } else {
+          printf("error: unknown format.\n");
+          goto exit;
+        }
       } else if (argv[i][1] == 'o') {
         out_file = argv[i]+2;
+      } else if (argv[i][1] == 'h') {
+        show_help();
+        goto exit;
       } else {
         printf("error: unknown option.\n");
         goto exit;
