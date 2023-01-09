@@ -88,7 +88,7 @@ void voice_set_fwrite(VOICE_SET* vs, FILE* fp, int format) {
                 v->total_level_c2, v->key_scaling_c2, v->phase_multi_c2, v->detune1_c2, v->detune2_c2, v->ams_enable_c2);
 
         fprintf(fp, "/       AF   FB   OM\n");
-        fprintf(fp, "       %3d, %3d, %3d)\n", 
+        fprintf(fp, "        %3d, %3d, %3d)\n", 
                 v->connection, v->feedback, v->slot_mask);
         break;
 
