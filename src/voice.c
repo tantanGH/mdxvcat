@@ -118,7 +118,7 @@ void voice_set_fwrite(VOICE_SET* vs, FILE* fp, int format) {
                 v->total_level_c2, v->key_scaling_c2, v->phase_multi_c2, v->detune1_c2, v->detune2_c2, v->ams_enable_c2);
 
         fprintf(fp, "};\n");
-        fprintf(fp, "/* m_vset(%d,voice_data_%d); */\n", v->voice_id, v->voice_id + 1);
+        fprintf(fp, "/* m_vset(%d,voice_data_%d); */\n", v->voice_id + 1, v->voice_id + 1);
         break;
 
       case FORMAT_BAS:
