@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <doslib.h>
 
 void show_help() {
   printf("MDXVCAT - MDX Voice Data Extractor version " VERSION " 2023 by tantan\n");
@@ -65,6 +66,16 @@ int main(int argc, char* argv[]) {
 
   FILE* op = stdout;
   if (out_file != NULL) {
+    struct FILBUF filbuf;
+    if (FILES(&filbuf, out_file, 0x23) == 0) {
+      char c;
+      printf("warn: output file (%s) exists. overwrite? (y/n)", out_file);
+      scanf("%c",&c);
+      if (c != 'y' && c != 'Y') {
+        printf("canceled.\n");
+        goto exit;
+      }
+    }    
     op = fopen(out_file, "w");
     if (op == NULL) {
       printf("error: cannot open output file.\n");
