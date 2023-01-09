@@ -10,7 +10,7 @@ X680x0/Human68k 上で動作します。コマンドラインツールなので 
 
 ### Install
 
-MDXVCxxx.ZIP をダウンpロードして展開し、MDXVCAT.X をパスの通ったディレクトリに置きます。
+MDXVCxxx.ZIP をダウンロードして展開し、MDXVCAT.X をパスの通ったディレクトリに置きます。
 
 ---
 
