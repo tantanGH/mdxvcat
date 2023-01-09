@@ -5,7 +5,7 @@
 #include <string.h>
 #include <doslib.h>
 
-void show_help() {
+static void show_help() {
   printf("MDXVCAT - MDX Voice Data Extractor version " VERSION " 2023 by tantan\n");
   printf("usage: mdxvcat [option] <mdx-file-name>\n");
   printf("options:\n");
