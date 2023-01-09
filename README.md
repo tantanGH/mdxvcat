@@ -84,7 +84,7 @@ MDXVCxxx.ZIP をダウンpロードして展開し、MDXVCAT.X をパスの通�
 
 ---
 
-出力例 XC 形式 (音色番号は+1されます)
+出力例 XC 形式 (音色番号は+1されます。ハードウェアLFO関連パラメータは無視されます)
 
     /* SAMPLE MDX by tantan */
 
@@ -114,7 +114,7 @@ MDXVCxxx.ZIP をダウンpロードして展開し、MDXVCAT.X をパスの通�
 
 ---
 
-出力例 X-BASIC 形式 (音色番号は+1されます)
+出力例 X-BASIC 形式 (音色番号は+1されます。ハードウェアLFO関連パラメータは無視されます)
 
     1000 /* SAMPLE MDX by tantan */
     1010 /* SAMPLE1.MDX */
