@@ -102,6 +102,8 @@ int main(int argc, char* argv[]) {
 
   mdx_close(&mdx);
 
+  rc = 0;
+
 catch:
   if (out_file != NULL) {
     fclose(op);
