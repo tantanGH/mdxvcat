@@ -84,15 +84,25 @@ int main(int argc, char* argv[]) {
   }
   
   MDX mdx;
-  mdx_open(&mdx, mdx_file); 
+  if (mdx_open(&mdx, mdx_file) != 0) {
+    printf("error: mdx file read error.\n");
+    goto catch;
+  }
+
   //mdx_describe(&mdx);
 
   VOICE_SET* vs = mdx_get_voice_set(&mdx);
+  if (vs == NULL) {
+    printf("error: cannot extract any voices.\n");
+    goto catch;
+  }
+
   voice_set_fwrite(vs, op, format);
   voice_set_close(vs);
 
   mdx_close(&mdx);
 
+catch:
   if (out_file != NULL) {
     fclose(op);
   }
